@@ -859,12 +859,21 @@ checksum = "d0881ea181b1df73ff77ffaaf9c7544ecc11e82fba9b5f27b262a3c73a332555"
 name = "easyvpn"
 version = "0.1.0"
 dependencies = [
- "dirs 5.0.1",
+ "easyvpn-core",
  "serde",
  "serde_json",
  "tauri",
  "tauri-build",
  "tauri-plugin-opener",
+]
+
+[[package]]
+name = "easyvpn-core"
+version = "0.1.0"
+dependencies = [
+ "dirs 5.0.1",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

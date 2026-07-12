@@ -15,24 +15,41 @@ but you never have to think about that.
 
 ## Getting started
 
-You'll need a Mac that stays on at home, and [Homebrew](https://brew.sh)
+You'll need a Mac that stays on at home, with [Homebrew](https://brew.sh)
 installed.
+
+### Fastest path — clone and run
+
+```bash
+git clone https://github.com/ThatXliner/easyVPN
+cd easyVPN
+./setup.sh
+```
+
+`setup.sh` installs what's missing (Rust, sing-box), builds and installs the
+`easyvpn` CLI, creates your server, adds your first guest, and prints the share
+link plus the two router rules to add. It's idempotent — re-run it anytime. The
+only thing left to you is the router port-forward.
+
+Manage it afterwards with the CLI (great over SSH on a headless box):
+
+```bash
+easyvpn status             # check sing-box + network + server state
+easyvpn guest add laptop   # add another device, prints its link
+easyvpn guest list         # all guests + links   (--json for scripting)
+sudo easyvpn start | stop  # start/stop + boot service
+```
+
+### Prefer a graphical app?
 
 ```bash
 npm install
-npm run tauri dev      # run the app
+npm run tauri dev          # or: npm run tauri build  → a double-click .app
 ```
 
-Then just follow the wizard:
-
-1. **System** — installs the pieces it needs and finds your network info.
-2. **Server** — sets up your VPN (one click).
-3. **Port forward** — shows the two rules to add on your router. *This is the
-   only manual step.*
-4. **Guests** — add a person for each device, then copy their link or show the
-   QR code.
-
-To build a double-click `.app` instead: `npm run tauri build`.
+Then follow the wizard: **System → Server → Port forward → Guests** (add a
+person per device, copy their link or show the QR). The app and CLI share the
+same server, so you can mix and match.
 
 ---
 

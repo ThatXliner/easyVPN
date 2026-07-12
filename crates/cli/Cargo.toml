@@ -1,0 +1,15 @@
+[package]
+name = "easyvpn-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Command-line front-end for easyVPN — run a censorship-resistant VPN server from a headless Mac."
+
+[[bin]]
+name = "easyvpn"
+path = "src/main.rs"
+
+[dependencies]
+easyvpn-core.workspace = true
+serde_json.workspace = true
+clap = { version = "4", features = ["derive"] }

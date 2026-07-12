@@ -66,24 +66,49 @@ is revoked per-guest by removing them.
 
 ## Project layout
 
+The engine is a standalone crate shared by two front-ends — the Tauri desktop
+app and the CLI — so there's exactly one implementation.
+
 ```
 easyVPN/
+├── Cargo.toml              # workspace root (members: crates/*, excludes src-tauri)
+├── crates/
+│   ├── core/               # easyvpn-core: the engine (no UI, no Tauri dep)
+│   │   └── src/lib.rs      #   creds, config rendering, service mgmt, links, tests
+│   └── cli/                # easyvpn-cli: `easyvpn` binary (clap)
+│       └── src/main.rs
 ├── src/                    # React + TypeScript frontend (the wizard)
 │   ├── App.tsx             # 4-step wizard UI
 │   ├── api.ts              # typed wrapper over Tauri commands
 │   └── Qr.tsx              # QR rendering for share links
 ├── src-tauri/
-│   ├── src/server.rs       # the VPN engine (creds, config, service, links)
-│   └── src/lib.rs          # Tauri command registration
+│   └── src/server.rs       # thin #[tauri::command] wrappers over easyvpn-core
 ├── scripts/e2e.sh          # real server+client end-to-end test
 └── docs/DEVELOPMENT.md      # this file
 ```
 
-The engine (`server.rs`) is deliberately the only place that shells out to
-external tools (`sing-box`, `openssl`, `launchctl`, `osascript`). Privileged
-operations run through a single `run_privileged` helper that stages a script and
-invokes it with `osascript … with administrator privileges`, so the user sees
-exactly one native password prompt.
+`easyvpn-core` is the only place that shells out to external tools (`sing-box`,
+`openssl`, `launchctl`, `osascript`). It has no UI or Tauri dependency, so the
+CLI stays lightweight. Both front-ends read/write the same state under
+`~/Library/Application Support/com.me.easyvpn/`, so you can set the server up
+over SSH with the CLI and manage guests from the app, or vice versa.
+
+Privileged operations go through one `run_privileged` helper parameterized by an
+`Elevation` mode: the app passes `GuiPrompt` (a native `osascript` password
+dialog, one prompt), while the CLI runs under `sudo` and passes `AlreadyRoot`.
+
+`src-tauri` is deliberately **excluded** from the Cargo workspace so its
+`cargo tauri` tooling keeps its own target dir and lockfile; it depends on
+`easyvpn-core` by path.
+
+### Building
+
+```bash
+cargo build --release -p easyvpn-cli   # CLI  -> target/release/easyvpn
+npm run tauri build                     # app  -> src-tauri/target/.../easyVPN.app
+cargo test -p easyvpn-core              # unit tests
+./scripts/e2e.sh                        # end-to-end tunnel test
+```
 
 ---
 

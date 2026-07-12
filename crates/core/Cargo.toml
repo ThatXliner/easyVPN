@@ -1,0 +1,11 @@
+[package]
+name = "easyvpn-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "easyVPN engine: sing-box credential generation, config rendering, service management, and share-link building. GUI-agnostic."
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+dirs.workspace = true
