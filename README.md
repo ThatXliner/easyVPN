@@ -1,90 +1,200 @@
-# 🛡️ easyVPN
+<p align="center">
+  <img src="public/og.png" alt="easyVPN — a private way back home" width="100%">
+</p>
 
-Turn a home Mac into a private VPN that works even from heavily censored
-networks — so a relative behind the Great Firewall or a friend on a filtered
-connection can get online by pasting **one link** into a free app.
+<h1 align="center">easyVPN</h1>
 
-No terminal, no config files. You click through four steps; each person you
-invite gets their own link (and a QR code) to paste into their VPN app.
+<p align="center">
+  Turn a home Mac into a private, censorship-resistant internet gateway<br>
+  for the people you care about.
+</p>
 
-Under the hood it uses two censorship-resistant protocols (Reality and
-Hysteria2) that ordinary VPNs like WireGuard can't match on blocked networks —
-but you never have to think about that.
+<p align="center">
+  <a href="https://bryanhu.com/easyVPN/"><strong>Website</strong></a> ·
+  <a href="#quick-start"><strong>Quick start</strong></a> ·
+  <a href="docs/DEVELOPMENT.md"><strong>Architecture</strong></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/ThatXliner/easyVPN/actions/workflows/pages.yml"><img src="https://github.com/ThatXliner/easyVPN/actions/workflows/pages.yml/badge.svg" alt="GitHub Pages"></a>
+  <img src="https://img.shields.io/badge/platform-macOS-161813?logo=apple&logoColor=white" alt="macOS">
+  <img src="https://img.shields.io/badge/powered%20by-sing--box-D9FF52" alt="Powered by sing-box">
+</p>
 
 ---
 
-## Getting started
+easyVPN is a small control plane for running your own VPN from a Mac that stays
+at home. It packages [Reality](https://sing-box.sagernet.org/configuration/inbound/vless/)
+and [Hysteria2](https://sing-box.sagernet.org/configuration/inbound/hysteria2/)
+behind a four-step desktop app and a scriptable CLI.
 
-You'll need a Mac that stays on at home, with [Homebrew](https://brew.sh)
-installed.
+You set up the server once, add a guest, and send them a private link or QR
+code. Every guest gets separate credentials, so you can revoke one person
+without disrupting everyone else.
 
-### Fastest path — clone and run
+## Why easyVPN?
+
+- **No VPN subscription.** The gateway runs on hardware and an internet
+  connection you already control.
+- **Built for difficult networks.** Guests can choose a fast Hysteria2 route or
+  a stealthier Reality fallback.
+- **No configuration maze.** The app walks through system setup, server
+  identity, router rules, and guest access.
+- **Local by default.** Server state and credentials remain on the host Mac.
+- **Two interfaces, one engine.** The desktop app and CLI operate on the same
+  state, so they can be used interchangeably.
+
+## How it works
+
+```mermaid
+flowchart LR
+    G[Guest device] -->|Private share link| C[VPN client]
+    C -->|Reality: TCP 443<br>Hysteria2: UDP 443| R[Home router]
+    R -->|Port forward| M[Your Mac]
+    M --> S[sing-box]
+    S --> I[Open internet]
+```
+
+The setup flow is intentionally short:
+
+1. **Check** the Mac, local network, Homebrew, and `sing-box`.
+2. **Create** a server identity and keep its secrets locally.
+3. **Route** TCP 443 and UDP 443 from the home router to the Mac.
+4. **Share** a unique link or QR code with each guest.
+
+## Quick start
+
+You need:
+
+- a Mac that can stay online while guests are connected;
+- [Homebrew](https://brew.sh); and
+- access to the home router's port-forwarding settings.
+
+Then clone the project and run the setup assistant:
 
 ```bash
-git clone https://github.com/ThatXliner/easyVPN
+git clone https://github.com/ThatXliner/easyVPN.git
 cd easyVPN
 ./setup.sh
 ```
 
-`setup.sh` installs what's missing (Rust, sing-box), builds and installs the
-`easyvpn` CLI, creates your server, adds your first guest, and prints the share
-link plus the two router rules to add. It's idempotent — re-run it anytime. The
-only thing left to you is the router port-forward.
+The script checks the prerequisites, optionally installs Rust, installs
+`sing-box`, builds the CLI, creates the server identity, adds the first guest,
+and prints the two router rules. It is idempotent, so it is safe to run again.
 
-Manage it afterwards with the CLI (great over SSH on a headless box):
+The router step is currently manual. Forward both rules to the Mac:
+
+| Protocol | External port | Internal port |
+| --- | ---: | ---: |
+| TCP | 443 | 443 |
+| UDP | 443 | 443 |
+
+When the rules are in place, start the gateway:
 
 ```bash
-easyvpn status             # check sing-box + network + server state
-easyvpn guest add laptop   # add another device, prints its link
-easyvpn guest list         # all guests + links   (--json for scripting)
-sudo easyvpn start | stop  # start/stop + boot service
+sudo easyvpn start
 ```
 
-### Prefer a graphical app?
+## Desktop app
+
+There is not a signed binary release yet, so the graphical app is built from
+source:
 
 ```bash
 npm install
-npm run tauri dev          # or: npm run tauri build  → a double-click .app
+npm run tauri dev
 ```
 
-Then follow the wizard: **System → Server → Port forward → Guests** (add a
-person per device, copy their link or show the QR). The app and CLI share the
-same server, so you can mix and match.
+To produce a double-clickable macOS app and DMG:
 
----
+```bash
+npm run tauri build
+```
 
-## Sending a link to someone
+The desktop app and CLI read the same server state from
+`~/Library/Application Support/com.me.easyvpn/`.
 
-Everyone you add gets two links. Have them install a free client, then paste a
-link in and connect:
+## Give someone access
 
-| Their device | Free app to install |
-|--------------|---------------------|
-| iPhone/iPad  | **Hiddify** or **Streisand** |
-| Android      | **v2rayNG** or **Hiddify** |
-| Windows      | **v2rayN** or **Hiddify** |
-| Mac          | **Hiddify** |
+Add a separate guest for every person or device:
 
-**Tell them to try the Hysteria2 link first** — it's usually much faster on
-censored networks. If it won't connect, the Reality link is the stealthier
-backup.
+```bash
+easyvpn guest add phone
+```
 
-> ⚠️ A link is a password. Send it privately (e.g. Signal), not over email or
-> text, and add a separate guest for each person so you can remove one without
-> affecting the others.
+easyVPN prints two private links. Have the guest install a compatible client,
+paste one link, and connect.
 
----
+| Device | Compatible clients |
+| --- | --- |
+| iPhone / iPad | Hiddify, Streisand |
+| Android | Hiddify, v2rayNG |
+| Windows | Hiddify, v2rayN |
+| macOS | Hiddify |
 
-## Good to know
+Try the **Hysteria2** link first for throughput on unreliable networks. Use the
+**Reality** link if the first route is blocked or unstable.
 
-- **macOS only** for now.
-- Uses port 443; if your ISP blocks it, that's a known limitation (a port
-  setting is coming).
-- Helping family and friends reach the open internet is a legitimate use — but
-  packaging or selling circumvention tools carries real legal and safety
-  considerations in some places. Worth thinking through before you distribute.
+> [!IMPORTANT]
+> A guest link is a password. Send it through a private channel, never post it
+> publicly, and create separate credentials for each person.
 
----
+Revoke a guest and apply the change:
 
-**Developers:** see [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) for how it
-works, the architecture, testing, and security details.
+```bash
+easyvpn guest rm phone
+sudo easyvpn start
+```
+
+## CLI reference
+
+```text
+easyvpn status                 Check dependencies, addresses, and server state
+easyvpn install                Install sing-box with Homebrew
+easyvpn init                   Create the server identity
+easyvpn ports                  Print the required router rules
+easyvpn guest add <name>       Create credentials and print share links
+easyvpn guest list             List guests and links (--json is available)
+easyvpn guest rm <name>        Revoke one guest
+sudo easyvpn start             Apply config, start now, and enable at boot
+sudo easyvpn stop              Stop the server and remove the boot service
+```
+
+## Before you rely on it
+
+easyVPN is an early-stage, macOS-only project. A few practical constraints are
+worth understanding:
+
+- The host Mac must stay awake and connected.
+- The router must support inbound port forwarding. Connections behind CGNAT
+  may require additional ISP or network setup.
+- Some ISPs block inbound port 443.
+- Share links use the current public IP. If it changes, generate and resend the
+  links.
+- There is no automatic updater or signed release channel yet.
+- Laws and network policies vary. Understand the rules that apply to you and
+  use the project responsibly.
+
+## Development
+
+The tested Rust engine is shared by the CLI and the Tauri app. The React
+frontend is also the source for the project website: browsers render the public
+landing page, while Tauri renders the setup interface.
+
+```bash
+cargo test --workspace          # Rust unit tests
+npm run build                   # TypeScript + production web build
+npm run tauri build -- --debug  # Native app and DMG
+./scripts/e2e.sh                # Real local tunnels through both protocols
+```
+
+See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for the architecture, service
+model, test strategy, and security notes.
+
+## Contributing
+
+Issues and focused pull requests are welcome. The most useful areas right now
+are configurable ports, clearer network diagnostics, signed releases, and
+additional platform support.
+
+Built on [sing-box](https://github.com/SagerNet/sing-box).

@@ -49,107 +49,77 @@ function LandingPage() {
         </a>
         <nav aria-label="Main navigation">
           <a href="#how-it-works">How it works</a>
-          <a href="#inside">Inside the app</a>
+          <a href="#inside">The app</a>
           <a href={REPO_URL}>GitHub <Arrow /></a>
         </nav>
       </header>
 
       <main id="top">
-        <section className="hero">
-          <div className="hero__copy">
-            <div className="eyebrow"><span /> Private infrastructure for real people</div>
+        <section className="simple-hero">
+          <div className="simple-hero__copy">
+            <p className="eyebrow">Open source · macOS · No subscription</p>
             <h1>
-              The open internet,
-              <em>hosted at home.</em>
+              A private way
+              <span>back home.</span>
             </h1>
-            <p className="hero__lede">
-              Turn a Mac into a private, censorship-resistant gateway for the people you care
-              about. No terminal. No config maze. One link and they&apos;re through.
+            <p className="simple-hero__lede">
+              easyVPN turns a Mac into a secure internet gateway for the people you care about.
+              Set it up once. Share one link. Stay in control.
             </p>
-            <div className="hero__actions">
-              <a className="cta cta--ink" href={`${REPO_URL}#getting-started`}>
-                Set up easyVPN <Arrow />
+            <div className="simple-hero__actions">
+              <a className="cta cta--ink" href={`${REPO_URL}#quick-start`}>
+                Get started <Arrow />
               </a>
-              <a className="text-link" href="#how-it-works">See the four steps ↓</a>
-            </div>
-            <div className="hero__proof" aria-label="Product highlights">
-              <span>macOS</span>
-              <span>Open source</span>
-              <span>Built on sing-box</span>
+              <a className="text-link" href="#inside">See the app</a>
             </div>
           </div>
 
-          <div className="signal-orbit" aria-label="A private connection from home to anywhere">
-            <div className="orbit orbit--one" />
-            <div className="orbit orbit--two" />
-            <div className="orbit orbit--three" />
-            <div className="signal-orbit__home">
-              <BrandMark />
-              <b>YOUR MAC</b>
-              <small>HOME BASE</small>
+          <div className="route-visual" aria-label="A private connection from a guest back home">
+            <div className="route-visual__line" />
+            <div className="route-node route-node--home">
+              <span><BrandMark compact /></span>
+              <div><b>Your Mac</b><small>Home gateway</small></div>
             </div>
-            <div className="signal-orbit__guest">
-              <span className="signal-dot" />
-              <b>FAMILY</b>
-              <small>CONNECTED</small>
+            <div className="route-node route-node--guest">
+              <i />
+              <div><b>Someone you trust</b><small>Connected privately</small></div>
             </div>
-            <div className="signal-orbit__route">ENCRYPTED ROUTE · 443</div>
+            <span className="route-visual__label">Encrypted route</span>
           </div>
         </section>
 
-        <section className="ticker" aria-label="Supported technologies">
+        <section className="proof-strip" aria-label="Product highlights">
+          <div><strong>2</strong><span>resilient protocols</span></div>
+          <div><strong>4</strong><span>guided setup steps</span></div>
+          <div><strong>0</strong><span>accounts or subscriptions</span></div>
+        </section>
+
+        <section className="plain-intro" id="how-it-works">
+          <p className="section-label">How it works</p>
           <div>
-            <span>REALITY</span><i>✦</i><span>HYSTERIA2</span><i>✦</i><span>ONE-TAP SHARING</span>
-            <i>✦</i><span>YOUR HARDWARE</span><i>✦</i><span>NO SUBSCRIPTION</span>
-          </div>
-        </section>
-
-        <section className="manifesto" id="how-it-works">
-          <div className="section-kicker">01 / THE IDEA</div>
-          <div className="manifesto__copy">
-            <h2>Your Mac is already powerful enough.</h2>
+            <h2>Your Mac becomes the gateway.</h2>
             <p>
-              easyVPN turns hardware you own into a quiet little doorway home. It wraps two
-              resilient protocols in a guided setup, then gives each guest a private QR code and
-              share link. You stay in control. They get a route that actually works.
+              easyVPN wraps powerful networking tools in a guided desktop app. Your guests get
+              their own revocable credentials. Their traffic travels through your home connection,
+              while the keys and configuration stay on your machine.
             </p>
           </div>
         </section>
 
-        <section className="steps-grid" aria-label="How easyVPN works">
-          <article className="step-card step-card--acid">
-            <span className="step-card__num">01</span>
-            <div className="mini-glyph mini-glyph--scan"><i /><i /><i /></div>
-            <h3>Check the Mac</h3>
-            <p>easyVPN finds your network, checks the essentials, and installs the engine.</p>
-          </article>
-          <article className="step-card step-card--blue">
-            <span className="step-card__num">02</span>
-            <div className="mini-glyph mini-glyph--key"><i /><i /></div>
-            <h3>Create an identity</h3>
-            <p>Fresh cryptographic keys and camouflage are generated and kept on your machine.</p>
-          </article>
-          <article className="step-card step-card--coral">
-            <span className="step-card__num">03</span>
-            <div className="mini-glyph mini-glyph--route"><i /><i /></div>
-            <h3>Open the route</h3>
-            <p>Two clearly explained router rules point secure traffic to your new gateway.</p>
-          </article>
-          <article className="step-card step-card--cream">
-            <span className="step-card__num">04</span>
-            <div className="mini-glyph mini-glyph--share"><i /><i /><i /></div>
-            <h3>Invite your people</h3>
-            <p>Give each person a revocable link or QR code. They paste, connect, and go.</p>
-          </article>
+        <section className="simple-steps" aria-label="Four setup steps">
+          <article><span>01</span><h3>Check</h3><p>Confirm the Mac and network are ready.</p></article>
+          <article><span>02</span><h3>Create</h3><p>Generate a private server identity locally.</p></article>
+          <article><span>03</span><h3>Route</h3><p>Add two clearly explained router rules.</p></article>
+          <article><span>04</span><h3>Share</h3><p>Send each guest their own link or QR code.</p></article>
         </section>
 
-        <section className="app-showcase" id="inside">
-          <div className="section-kicker section-kicker--light">02 / INSIDE THE APP</div>
-          <div className="app-showcase__heading">
-            <h2>Serious technology.<br />A very unserious learning curve.</h2>
+        <section className="quiet-showcase" id="inside">
+          <div className="quiet-showcase__heading">
+            <p className="section-label section-label--light">The desktop app</p>
+            <h2>Nothing important is hidden.</h2>
             <p>
-              Four calm screens replace a weekend of command-line archaeology. Every action says
-              what it does, what changed, and what comes next.
+              Four calm screens replace a weekend of configuration. Each step explains what it
+              changes, why it matters, and what comes next.
             </p>
           </div>
 
@@ -160,17 +130,17 @@ function LandingPage() {
               <i>● SECURE</i>
             </div>
             <div className="product-window__body">
-              <aside>
+              <aside className="product-window__sidebar">
                 <div className="mock-brand"><BrandMark compact /><Wordmark inverted /></div>
-                <small>SETUP FLOW</small>
-                <div className="mock-step is-done"><b>01</b><span>System<small>Ready</small></span></div>
-                <div className="mock-step is-done"><b>02</b><span>Identity<small>Created</small></span></div>
-                <div className="mock-step is-active"><b>03</b><span>Router<small>In progress</small></span></div>
-                <div className="mock-step"><b>04</b><span>Guests<small>Up next</small></span></div>
+                <small>SETUP</small>
+                <div className="mock-step is-done"><b>01</b><span>System</span></div>
+                <div className="mock-step is-done"><b>02</b><span>Identity</span></div>
+                <div className="mock-step is-active"><b>03</b><span>Router</span></div>
+                <div className="mock-step"><b>04</b><span>Guests</span></div>
               </aside>
               <div className="mock-panel">
-                <div className="mock-panel__top"><span>STEP 03</span><i>2 MINUTES</i></div>
-                <h3>Open a route home.</h3>
+                <div className="mock-panel__top"><span>STEP 03 OF 04</span><i>ABOUT 2 MINUTES</i></div>
+                <h3>Point traffic home.</h3>
                 <p>Add these two rules to your router. Both point to this Mac.</p>
                 <div className="route-row"><b>TCP</b><strong>443</strong><span>→</span><em>192.168.1.24</em><small>REALITY</small></div>
                 <div className="route-row"><b>UDP</b><strong>443</strong><span>→</span><em>192.168.1.24</em><small>HYSTERIA2</small></div>
@@ -180,41 +150,39 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="protocols">
-          <div className="section-kicker">03 / TWO ROUTES, ONE GOAL</div>
-          <div className="protocols__intro">
-            <h2>Fast when it can be.<br />Invisible when it must be.</h2>
+        <section className="simple-protocols">
+          <div className="simple-protocols__heading">
+            <p className="section-label">Two routes</p>
+            <h2>Choose what the network allows.</h2>
           </div>
-          <div className="protocol-card">
-            <span className="protocol-card__index">A</span>
-            <div><small>FAST LANE</small><h3>Hysteria2</h3></div>
-            <p>Built for unreliable, lossy, or heavily filtered networks. This is the first route guests try.</p>
-            <span className="protocol-card__signal">))))</span>
-          </div>
-          <div className="protocol-card">
-            <span className="protocol-card__index">B</span>
-            <div><small>STEALTH LANE</small><h3>Reality</h3></div>
-            <p>Traffic blends into ordinary HTTPS when discretion matters more than raw throughput.</p>
-            <span className="protocol-card__signal">····</span>
+          <div className="simple-protocols__grid">
+            <article>
+              <span>Fast path</span>
+              <h3>Hysteria2</h3>
+              <p>Designed to stay responsive on unreliable, lossy, or heavily filtered connections.</p>
+            </article>
+            <article>
+              <span>Stealth path</span>
+              <h3>Reality</h3>
+              <p>Designed to resemble ordinary HTTPS traffic when blending in matters most.</p>
+            </article>
           </div>
         </section>
 
-        <section className="final-cta">
-          <BrandMark />
+        <section className="simple-cta">
           <div>
-            <p>YOUR HOUSE. YOUR HARDWARE. YOUR RULES.</p>
-            <h2>Bring the internet home.</h2>
+            <p>Your hardware. Your people. Your rules.</p>
+            <h2>Build a way home.</h2>
           </div>
           <a className="cta cta--acid" href={REPO_URL}>
-            Get the source <Arrow />
+            View on GitHub <Arrow />
           </a>
         </section>
       </main>
 
       <footer className="site-footer">
-        <div><Wordmark inverted /><p>Private infrastructure for the people you care about.</p></div>
-        <div><b>PROJECT</b><a href={REPO_URL}>GitHub</a><a href={`${REPO_URL}/blob/main/README.md`}>Setup guide</a></div>
-        <div><b>BUILT WITH</b><a href="https://sing-box.sagernet.org">sing-box</a><span>Reality + Hysteria2</span></div>
+        <div><Wordmark inverted /><p>A private way back home.</p></div>
+        <nav><a href={REPO_URL}>GitHub</a><a href={`${REPO_URL}#quick-start`}>Setup</a><a href="https://sing-box.sagernet.org">sing-box</a></nav>
         <small>Open source · macOS · Use responsibly</small>
       </footer>
     </div>
