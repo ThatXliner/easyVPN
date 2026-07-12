@@ -57,10 +57,10 @@ function LandingPage() {
       <main id="top">
         <section className="simple-hero">
           <div className="simple-hero__copy">
-            <p className="eyebrow">Open source · macOS · No subscription</p>
+            <p className="eyebrow"><i /> Private infrastructure for real people</p>
             <h1>
-              A private way
-              <span>back home.</span>
+              The open internet,
+              <span>hosted at home.</span>
             </h1>
             <p className="simple-hero__lede">
               easyVPN turns a Mac into a secure internet gateway for the people you care about.
@@ -75,7 +75,9 @@ function LandingPage() {
           </div>
 
           <div className="route-visual" aria-label="A private connection from a guest back home">
-            <div className="route-visual__line" />
+            <div className="route-orbit route-orbit--outer" />
+            <div className="route-orbit route-orbit--inner" />
+            <div className="route-visual__line"><i /></div>
             <div className="route-node route-node--home">
               <span><BrandMark compact /></span>
               <div><b>Your Mac</b><small>Home gateway</small></div>
@@ -84,7 +86,8 @@ function LandingPage() {
               <i />
               <div><b>Someone you trust</b><small>Connected privately</small></div>
             </div>
-            <span className="route-visual__label">Encrypted route</span>
+            <span className="route-visual__label">Encrypted route · 443</span>
+            <div className="route-visual__stamp">YOU OWN<br />THE EXIT</div>
           </div>
         </section>
 
@@ -97,7 +100,7 @@ function LandingPage() {
         <section className="plain-intro" id="how-it-works">
           <p className="section-label">How it works</p>
           <div>
-            <h2>Your Mac becomes the gateway.</h2>
+            <h2>Your Mac is already powerful enough.</h2>
             <p>
               easyVPN wraps powerful networking tools in a guided desktop app. Your guests get
               their own revocable credentials. Their traffic travels through your home connection,
@@ -116,7 +119,7 @@ function LandingPage() {
         <section className="quiet-showcase" id="inside">
           <div className="quiet-showcase__heading">
             <p className="section-label section-label--light">The desktop app</p>
-            <h2>Nothing important is hidden.</h2>
+            <h2>Serious tech. Four calm screens.</h2>
             <p>
               Four calm screens replace a weekend of configuration. Each step explains what it
               changes, why it matters, and what comes next.
@@ -172,7 +175,7 @@ function LandingPage() {
         <section className="simple-cta">
           <div>
             <p>Your hardware. Your people. Your rules.</p>
-            <h2>Build a way home.</h2>
+            <h2>Bring the internet home.</h2>
           </div>
           <a className="cta cta--acid" href={REPO_URL}>
             View on GitHub <Arrow />
